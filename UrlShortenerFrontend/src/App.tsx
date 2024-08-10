@@ -6,34 +6,47 @@ interface UrlProps {
   timesUsed: number;
 }
 
-const mockUrlPropsArray: UrlProps[] = [{"longUrl": "https://www.google.se/", "shortUrl": "goog", "timesUsed": 0}, {"longUrl": "https://www.salt.dev/", "shortUrl": "salt", "timesUsed": 0}]
+const mockUrlPropsArray: UrlProps[] = [{ "longUrl": "https://www.google.se/", "shortUrl": "goog", "timesUsed": 0 }, { "longUrl": "https://www.salt.dev/", "shortUrl": "salt", "timesUsed": 0 }]
 
 function PostField() {
   function handlePost() {
-    
+
   }
   return (
     <div>
-  <input></input>
-  <button onClick={handlePost}>submit</button>
-  </div>
-)
+      <input></input>
+      <button onClick={handlePost}>submit</button>
+    </div>
+  )
 }
 
-function UrlBlocks(){
-  function getBlock(props:UrlProps){
-    return(
-      <div>
-        <p>{props.longUrl}</p>
-        <p>{props.shortUrl}</p>
-        <p>{props.timesUsed}</p>
-      </div>
+function EditButton({id}){
+  return (
+  <button> Edit </button>
+  )
+}
+
+function UrlBlocks() {
+  function getBlock(props: UrlProps) {
+    return (
+      <tr>
+        <td>{props.shortUrl}</td>
+        <td>{props.longUrl}</td>
+        <td>{props.timesUsed}</td>
+        <td> <EditButton id= {props.shortUrl}/> </td>
+      </tr>
     )
   }
   return (
-    <div>
+    <table>
+      <tr>
+        <th>Long Url</th>
+        <th>Shortened Url</th>
+        <th>Times Used</th>
+        <th>Edit</th>
+      </tr>
       {mockUrlPropsArray.map(getBlock)}
-    </div>
+    </table>
   )
 }
 
@@ -46,9 +59,9 @@ function App() {
   return (
     <>
       <h1>{urlPath}</h1>
-      <PostField/>
+      <PostField />
       <p>hejehej</p>
-      <UrlBlocks/>
+      <UrlBlocks />
     </>
   )
 }
