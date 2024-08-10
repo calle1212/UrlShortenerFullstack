@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.api.data;
+using Backend.api.models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,10 +18,25 @@ public class UrlController(IUrlRepository repo) : Controller
 
 
     [HttpGet]
-    public string GetHelloWorld()
+    public Url[] GetAllUrls()
     {
-        var id = _repo.CreateUrl("google.se");
-        return _repo.GetUrl(id).LongUrl;
+        return _repo.GetAll();
+    }
+
+    [HttpGet("/{shortUrl}")]
+    public ActionResult<Url> GetUrl(string shortUrl)
+    {
+        return _repo.GetUrl(shortUrl) is Url foundUrl
+        ? foundUrl
+        : NotFound("Url was not found");
+    }
+
+    [HttpPost]
+    public ActionResult<Url> Create(string longUrl)
+    {
+       
+        Url newUrl = _repo.CreateUrl(longUrl);
+        return CreatedAtAction(nameof(GetUrl), new { shortUrl = newUrl!.ShortUrl }, newUrl);
     }
 
 }

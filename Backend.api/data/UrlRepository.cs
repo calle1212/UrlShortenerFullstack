@@ -7,11 +7,11 @@ public class UrlRepository : IUrlRepository
 {
     private readonly Dictionary<string, Url> _urls = new();
 
-    public string? CreateUrl(string LongUrl)
+    public Url? CreateUrl(string LongUrl)
     {
         var guid = Guid.NewGuid().ToString().Replace("-", "")[0..6];
         Url newUrl = new Url(LongUrl, guid);
-        return _urls.TryAdd(guid, newUrl) ? guid : null;
+        return _urls.TryAdd(guid, newUrl) ? newUrl : null;
     }
 
     public Url? GetUrl(string shortUrl)
@@ -34,6 +34,10 @@ public class UrlRepository : IUrlRepository
     public bool DeleteUrl(string shortUrl)
     {
         return _urls.Remove(shortUrl);
+    }
+
+    public Url[] GetAll() {
+        return _urls.Select(pair => pair.Value).ToArray();
     }
 
 }
