@@ -58,9 +58,7 @@ function App() {
   }
   return (
     <>
-      <h1>{urlPath}</h1>
       <PostField />
-      <p>hejehej</p>
       <UrlBlocks />
     </>
   )
