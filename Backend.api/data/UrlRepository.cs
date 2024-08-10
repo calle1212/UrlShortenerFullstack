@@ -1,5 +1,39 @@
+using System.Resources;
+using Backend.api.models;
+using Microsoft.VisualBasic;
+
 namespace Backend.api.data;
 public class UrlRepository : IUrlRepository
 {
+    private readonly Dictionary<string, Url> _urls = new();
+
+    public string? CreateUrl(string LongUrl)
+    {
+        var guid = Guid.NewGuid().ToString().Replace("-", "")[0..6];
+        Url newUrl = new Url(LongUrl, guid);
+        return _urls.TryAdd(guid, newUrl) ? guid : null;
+    }
+
+    public Url? GetUrl(string shortUrl)
+    {
+        return _urls.TryGetValue(shortUrl, out var url)
+        ? url
+        : null;
+    }
+
+    public bool UpdateUrl(string shortUrl, string newLongUrl)
+    {
+        if (_urls.TryGetValue(shortUrl, out var url))
+        {
+            url.LongUrl = newLongUrl;
+            return true;
+        }
+        return false;
+    }
+
+    public bool DeleteUrl(string shortUrl)
+    {
+        return _urls.Remove(shortUrl);
+    }
 
 }

@@ -19,7 +19,8 @@ public class UrlController(IUrlRepository repo) : Controller
     [HttpGet]
     public string GetHelloWorld()
     {
-        return "Hello World!";
+        var id = _repo.CreateUrl("google.se");
+        return _repo.GetUrl(id).LongUrl;
     }
 
 }
