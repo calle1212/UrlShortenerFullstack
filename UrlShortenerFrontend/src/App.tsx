@@ -1,4 +1,4 @@
-//import { useState } from 'react'
+import { useState } from 'react'
 
 interface UrlProps {
   longUrl: string;
@@ -6,16 +6,33 @@ interface UrlProps {
   timesUsed: number;
 }
 
-const mockUrlPropsArray: UrlProps[] = [{ "longUrl": "https://www.google.se/", "shortUrl": "goog", "timesUsed": 0 }, { "longUrl": "https://www.salt.dev/", "shortUrl": "salt", "timesUsed": 0 }]
+const UrlPropsArray: UrlProps[] = [];
+
 
 function PostField() {
-  function handlePost() {
+  const [input, setInput] = useState("");
+
+  async function handlesubmit() {
+    const response = await fetch("http://localhost:5277/api/Url", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({input}.input)
+    });
+    const responseData:UrlProps = await response.json();
+    console.log(responseData);
+    UrlPropsArray.push(responseData);
+
 
   }
+  const handleChange = (e) => {
+    setInput(e.target.value);
+  };
   return (
     <div>
-      <input></input>
-      <button onClick={handlePost}>submit</button>
+      <input type="text" value={input} onChange={handleChange}></input>
+      <button type="submit" onClick={handlesubmit}>submit</button>
     </div>
   )
 }
@@ -39,19 +56,24 @@ function UrlBlocks() {
   }
   return (
     <table>
-      <tr>
+      <thead>
+        <tr>
         <th>Long Url</th>
         <th>Shortened Url</th>
         <th>Times Used</th>
         <th>Edit</th>
-      </tr>
-      {mockUrlPropsArray.map(getBlock)}
+        </tr>
+      </thead>
+      <tbody>
+      {UrlPropsArray.map(getBlock)}
+      </tbody>
     </table>
   )
 }
 
 function App() {
   const urlPath = window.location.pathname;
+  console.log(UrlPropsArray);
   if (urlPath == "/google") {
     window.location.href = "http://google.se";
     return (<></>)

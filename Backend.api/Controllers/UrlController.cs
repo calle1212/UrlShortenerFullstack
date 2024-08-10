@@ -23,19 +23,19 @@ public class UrlController(IUrlRepository repo) : Controller
         return _repo.GetAll();
     }
 
-    [HttpGet("/{shortUrl}")]
+    [HttpGet("{shortUrl}")]
     public ActionResult<Url> GetUrl(string shortUrl)
     {
         var foundUrl = _repo.GetUrl(shortUrl);
         if(foundUrl != null) {
             foundUrl.timesUsed +=1;
-            return foundUrl;
+            return foundUrl; // redirect here
         }
         return NotFound("Url was not found");
     }
 
     [HttpPost]
-    public ActionResult<Url> Create(string longUrl)
+    public ActionResult<Url> Create([FromBody] string longUrl)
     {
        
         Url newUrl = _repo.CreateUrl(longUrl);
