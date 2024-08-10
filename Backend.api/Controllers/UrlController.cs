@@ -26,9 +26,12 @@ public class UrlController(IUrlRepository repo) : Controller
     [HttpGet("/{shortUrl}")]
     public ActionResult<Url> GetUrl(string shortUrl)
     {
-        return _repo.GetUrl(shortUrl) is Url foundUrl
-        ? foundUrl
-        : NotFound("Url was not found");
+        var foundUrl = _repo.GetUrl(shortUrl);
+        if(foundUrl != null) {
+            foundUrl.timesUsed +=1;
+            return foundUrl;
+        }
+        return NotFound("Url was not found");
     }
 
     [HttpPost]
