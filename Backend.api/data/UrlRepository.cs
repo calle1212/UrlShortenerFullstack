@@ -21,14 +21,14 @@ public class UrlRepository : IUrlRepository
         : null;
     }
 
-    public bool UpdateUrl(string shortUrl, string newLongUrl)
+    public Url? UpdateUrl(string shortUrl, string newLongUrl)
     {
         if (_urls.TryGetValue(shortUrl, out var url))
         {
             url.LongUrl = newLongUrl;
-            return true;
+            return url;
         }
-        return false;
+        return null;
     }
 
     public bool DeleteUrl(string shortUrl)

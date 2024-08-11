@@ -27,8 +27,9 @@ public class UrlController(IUrlRepository repo) : Controller
     public ActionResult<Url> GetUrl(string shortUrl)
     {
         var foundUrl = _repo.GetUrl(shortUrl);
-        if(foundUrl != null) {
-            foundUrl.timesUsed +=1;
+        if (foundUrl != null)
+        {
+            foundUrl.timesUsed += 1;
             return foundUrl; // redirect here
         }
         return NotFound("Url was not found");
@@ -37,9 +38,26 @@ public class UrlController(IUrlRepository repo) : Controller
     [HttpPost]
     public ActionResult<Url> Create([FromBody] string longUrl)
     {
-       
+
         Url newUrl = _repo.CreateUrl(longUrl);
         return CreatedAtAction(nameof(GetUrl), new { shortUrl = newUrl!.ShortUrl }, newUrl);
+    }
+
+    [HttpDelete]
+    public IActionResult Delete([FromBody] string shortUrl)
+    {
+        return _repo.DeleteUrl(shortUrl)
+        ? Ok()
+        : NotFound();
+
+    }
+
+    [HttpPatch]
+    public ActionResult<Url> Update([FromBody] string shortUrl,[FromBody] string longUrl)
+    {
+        return _repo.UpdateUrl(shortUrl, longUrl) is Url url
+        ? url
+        : NotFound("The url id was not found");
     }
 
 }

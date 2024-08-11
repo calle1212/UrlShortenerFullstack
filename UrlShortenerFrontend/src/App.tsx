@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface UrlProps {
   longUrl: string;
@@ -10,15 +10,23 @@ interface UrlProps {
 
 
 
-function EditButton({id}){
-  return (
-  <button> Edit </button>
-  )
-}
+
 
 function UrlBlocks() {
   //const UrlPropsArray: UrlProps[] = [];
   const [UrlPropsArray, setUrlPropsArray] = useState<UrlProps[]>([]);
+
+  useEffect(()=> {
+    fetch("http://localhost:5277/api/Url")
+    .then(res => {
+      return res.json()
+    })
+    .then((data) => {
+      console.log(data);
+      setUrlPropsArray(data);
+    })
+  }, [])
+
   function PostField() {
     const [input, setInput] = useState("");
   
@@ -45,14 +53,32 @@ function UrlBlocks() {
     )
   }
 
+  function DeleteBlock(shortUrl:string){
+    console.log(shortUrl);
+    fetch("http://localhost:5277/api/Url", ({
+      method: "DELETE",
+      headers : {
+        "Content-Type" : "application/json",
+      },
+      body: JSON.stringify(shortUrl)
+    })).catch((res) => (console.error(res)))
+    
+    setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
+  }
 
   function getBlock(props: UrlProps) {
     return (
-      <tr>
+      <tr key={props.shortUrl}>
         <td>{props.shortUrl}</td>
         <td>{props.longUrl}</td>
         <td>{props.timesUsed}</td>
-        <td> <EditButton id= {props.shortUrl}/> </td>
+        <td> 
+          <details>
+            <summary>Edit</summary>
+          <button key={props.shortUrl} onClick={() => DeleteBlock(props.shortUrl)}>Delete</button> <br></br>
+          <button> Update Url</button>
+          </details>
+          </td>
       </tr>
     )
   }
