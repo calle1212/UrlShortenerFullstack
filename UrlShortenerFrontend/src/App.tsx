@@ -16,29 +16,29 @@ function UrlBlocks() {
   //const UrlPropsArray: UrlProps[] = [];
   const [UrlPropsArray, setUrlPropsArray] = useState<UrlProps[]>([]);
 
-  useEffect(()=> {
+  useEffect(() => {
     fetch("http://localhost:5277/api/Url")
-    .then(res => {
-      return res.json()
-    })
-    .then((data) => {
-      console.log(data);
-      setUrlPropsArray(data);
-    })
+      .then(res => {
+        return res.json()
+      })
+      .then((data) => {
+        console.log(data);
+        setUrlPropsArray(data);
+      })
   }, [])
 
   function PostField() {
     const [input, setInput] = useState("");
-  
+
     async function handlesubmit() {
       const response = await fetch("http://localhost:5277/api/Url", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({input}.input)
+        body: JSON.stringify({ input }.input)
       });
-      const responseData:UrlProps = await response.json();
+      const responseData: UrlProps = await response.json();
       console.log(responseData);
       setUrlPropsArray([...UrlPropsArray, responseData])
     }
@@ -53,59 +53,92 @@ function UrlBlocks() {
     )
   }
 
-  function DeleteBlock(shortUrl:string){
+  function DeleteBlock(shortUrl: string) {
     console.log(shortUrl);
     fetch("http://localhost:5277/api/Url", ({
       method: "DELETE",
-      headers : {
-        "Content-Type" : "application/json",
+      headers: {
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(shortUrl)
     })).catch((res) => (console.error(res)))
-    
+
     setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
   }
 
-  function getBlock(props: UrlProps) {
+  function handleUpdate(shortUrlInput: string, longUrlInput: string) {
+    const req = { shortUrl: shortUrlInput, longUrl: longUrlInput }
+    fetch("http://localhost:5277/api/Url", ({
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(req)
+
+    })).catch((res) => (console.error(res)))
+    //setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
+    const arrElements = [...UrlPropsArray];
+    const foundUrl = arrElements.find(a => a.shortUrl == shortUrlInput)
+    foundUrl.longUrl = longUrlInput;
+    console.log(arrElements);
+    setUrlPropsArray(arrElements);
+  }
+
+  function GetUpdatesBlock({shortUrl}:UrlProps) {
+    //console.log(typeof propsInput.shortUrl); // Should output 'string'
+
+    const [input, setInput] = useState("");
+    const handleChange = (e) => {
+      setInput(e.target.value);
+    };
+    return (
+      <div>
+        <button onClick={() => DeleteBlock(shortUrl)}>Delete</button> <br></br>
+        <input type="text" value={input} onChange={handleChange}></input>
+        <button onClick={() => handleUpdate(shortUrl, { input }.input)}> Update Url</button>
+      </div>
+    )
+  }
+
+  function GetBlock(props: UrlProps) {
     return (
       <tr key={props.shortUrl}>
         <td>{props.shortUrl}</td>
         <td>{props.longUrl}</td>
         <td>{props.timesUsed}</td>
-        <td> 
+        <td>
           <details>
             <summary>Edit</summary>
-          <button key={props.shortUrl} onClick={() => DeleteBlock(props.shortUrl)}>Delete</button> <br></br>
-          <button> Update Url</button>
+            <GetUpdatesBlock {...props}  />
           </details>
-          </td>
+        </td>
       </tr>
     )
   }
   return (
     <>
-    <PostField/>
-    <table>
-      <thead>
-        <tr>
-        <th>Shortened Url</th>
-        <th>Long Url</th>
-        <th>Times Used</th>
-        <th>Edit</th>
-        </tr>
-      </thead>
-      <tbody>
-      {UrlPropsArray.map(getBlock)}
-      </tbody>
-    </table>
+      <PostField />
+      <table>
+        <thead>
+          <tr>
+            <th>Shortened Url</th>
+            <th>Long Url</th>
+            <th>Times Used</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {UrlPropsArray.map(GetBlock)}
+        </tbody>
+      </table>
     </>
   )
 }
 
 function App() {
   const urlPath = window.location.pathname;
-  if (urlPath == "/google") {
-    window.location.href = "http://google.se";
+  if (urlPath != "/") {
+    window.location.href = "http://localhost:5277/api/Url" + urlPath;
     return (<></>)
   }
   return (
