@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import "./index.css"
 
 interface UrlProps {
   longUrl: string;
@@ -7,9 +8,15 @@ interface UrlProps {
 }
 
 
-
-
-
+function ShortenString(longUrl: string): string {
+  const maxLength: number = 80;
+  if (longUrl.length > maxLength) {
+    return longUrl.substring(0, maxLength - 3) + "...";
+  }
+  else {
+    return longUrl;
+  }
+}
 
 
 function UrlBlocks() {
@@ -23,6 +30,9 @@ function UrlBlocks() {
       })
       .then((data) => {
         console.log(data);
+        data.forEach(element => {
+          element.longUrl = ShortenString(element.longUrl);
+        });
         setUrlPropsArray(data);
       })
   }, [])
@@ -40,15 +50,20 @@ function UrlBlocks() {
       });
       const responseData: UrlProps = await response.json();
       console.log(responseData);
-      setUrlPropsArray([...UrlPropsArray, responseData])
+      responseData.longUrl = ShortenString(responseData.longUrl);
+      setUrlPropsArray([...UrlPropsArray, responseData]);
     }
     const handleChange = (e) => {
       setInput(e.target.value);
     };
     return (
       <div>
-        <input type="text" value={input} onChange={handleChange}></input>
-        <button type="submit" onClick={handlesubmit}>submit</button>
+                  <p>Please enter your long URL</p>
+
+        <div className="submit-field__div">
+          <input className="submit-field__field" placeholder="https://verylongwebsiteaddress.com/very/long/path" type="text" value={input} onChange={handleChange}></input>
+          <button type="submit" onClick={handlesubmit}>submit</button>
+        </div>
       </div>
     )
   }
@@ -79,12 +94,15 @@ function UrlBlocks() {
     //setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
     const arrElements = [...UrlPropsArray];
     const foundUrl = arrElements.find(a => a.shortUrl == shortUrlInput)
-    foundUrl.longUrl = longUrlInput;
-    console.log(arrElements);
-    setUrlPropsArray(arrElements);
+    if (foundUrl != undefined) {
+      longUrlInput = ShortenString(longUrlInput);
+      foundUrl.longUrl = longUrlInput;
+      console.log(arrElements);
+      setUrlPropsArray(arrElements);
+    }
   }
 
-  function GetUpdatesBlock({shortUrl}:UrlProps) {
+  function GetUpdatesBlock({ shortUrl }: UrlProps) {
     //console.log(typeof propsInput.shortUrl); // Should output 'string'
 
     const [input, setInput] = useState("");
@@ -104,12 +122,12 @@ function UrlBlocks() {
     return (
       <tr key={props.shortUrl}>
         <td>{props.shortUrl}</td>
-        <td>{props.longUrl}</td>
+        <td className='th-max-width'>{props.longUrl}</td>
         <td>{props.timesUsed}</td>
         <td>
           <details>
             <summary>Edit</summary>
-            <GetUpdatesBlock {...props}  />
+            <GetUpdatesBlock {...props} />
           </details>
         </td>
       </tr>
@@ -118,19 +136,22 @@ function UrlBlocks() {
   return (
     <>
       <PostField />
-      <table>
-        <thead>
-          <tr>
-            <th>Shortened Url</th>
-            <th>Long Url</th>
-            <th>Times Used</th>
-            <th>Edit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {UrlPropsArray.map(GetBlock)}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto table__set-center">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Shortened Url</th>
+              <th>Long Url</th>
+              <th>Times Used</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {UrlPropsArray.map(GetBlock)}
+          </tbody>
+        </table>
+      </div>
     </>
   )
 }
@@ -143,6 +164,7 @@ function App() {
   }
   return (
     <>
+      <h1 className="h1__heading"> My little url shortener </h1>
       <UrlBlocks />
     </>
   )
