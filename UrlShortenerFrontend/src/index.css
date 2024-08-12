@@ -94,6 +94,13 @@ text-decoration: underline;
  cursor: pointer;
 }
 
+.copy-to-clipboard-message{
+  position: absolute;
+  margin-top: 0.5em;
+  border: 1px solid #aaaaaa;
+  background-color: #03203b;
+}
+
 
 
 

@@ -129,34 +129,62 @@ function UrlBlocks() {
       setIsVisible(!isVisible);
     };
     return (
+      <div>
       <button className="edit-button" onClick={toggleVisibility}>🖉</button>
-
+      {isVisible && (
+        <div className="mt-4 p-4 bg-blue-200">
+          This is a toggled div!
+        </div>
+      )}
+      </div>
     )
   }
 
-  function handleCopy(textToCopy:string) {
-    navigator.clipboard.writeText(textToCopy)
-      .then(() => {
-        console.log('Text copied to clipboard!');
-      })
-      .catch((err) => {
-        console.error('Failed to copy text: ', err);
-      });
-  };
+  function GetShortUrl({ shortUrl }: UrlProps) {
+    const textToCopy = "http://localhost:5173/" + shortUrl;
+
+    const handleCopy = () => {
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+          setShowMessage(true);
+          setTimeout(() => setShowMessage(false), 1500); // Hide the message after 2 seconds
+        })
+        .catch((err) => {
+          console.error('Failed to copy text: ', err);
+        });
+    };
+
+    const [showMessage, setShowMessage] = useState(false);
+    return (
+      <div className="relative">
+        <p
+          onClick={handleCopy}
+          className=""
+        >
+          {textToCopy}
+        </p>
+
+        {showMessage && (
+          <div className="copy-to-clipboard-message">
+            📋 Text copied to clipboard
+          </div>
+        )}
+      </div>
+    );
+  }
 
   function GetBlock(props: UrlProps) {
     const propLink = 'http://localhost:5277/api/Url/' + props.shortUrl;
-    const shortUrl = "http://localhost:5173/" + props.shortUrl;
-    const divContainerId = "id__" + shortUrl
-
+    
     return (
       <tr key={props.shortUrl}>
-        <td className='td__main td__shortUrl' onClick={()=> handleCopy(shortUrl)}>  {shortUrl} 📋</td>
-        <td className='td__main'  >{props.shortUrl}</td>
+        <td className='td__main td__shortUrl' >  <GetShortUrl {...props} /></td>
         <td className='th-max-width td__main td__longUrl'><a href={propLink} className='td__longUrl-link'> {props.longUrl}</a>
-          <div className={"update-field__container "+ divContainerId} ><GetUpdatesBlock {...props} /> </div>
+         <GetUpdatesBlock {...props} />
         </td>
         <td className='td__main'>{props.timesUsed}</td>
+ 
+        <td className='td__main'  >{props.shortUrl}</td>
         {/* <td className='td__edit'>
           <GetEditButton {...props} />
         </td> */}
@@ -174,11 +202,12 @@ function UrlBlocks() {
           <thead>
             <tr>
               <th>Short url</th>
-              <th>Id</th>
               <th>Long url</th>
               <th>Times Used</th>
+              <th>Id</th>
+              {/* <th></th> */}
               <th></th>
-              
+
             </tr>
           </thead>
           <tbody>
