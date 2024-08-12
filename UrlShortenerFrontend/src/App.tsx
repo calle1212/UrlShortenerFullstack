@@ -241,7 +241,7 @@ function App() {
   }
   return (
     <>
-      <h1 className="h1__heading" > My little url shortener </h1>
+      <h1 className="h1__heading text-yellow-400" > My little url shortener </h1>
       <p>The website is used to store long urls and make them more easily accessible through a short url. Just paste the id after this website's domain and share it to anyone who can use it to be redirected to the stored url. </p>
       <br></br>
       <UrlBlocks />
