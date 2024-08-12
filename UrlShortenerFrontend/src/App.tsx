@@ -29,7 +29,7 @@ function UrlBlocks() {
         return res.json()
       })
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         data.forEach(element => {
           element.longUrl = ShortenString(element.longUrl);
         });
@@ -58,11 +58,11 @@ function UrlBlocks() {
     };
     return (
       <div>
-                  <p>Please enter your long URL</p>
+        <p>Please enter your long URL</p>
 
         <div className="submit-field__div">
           <input className="submit-field__field" placeholder="https://verylongwebsiteaddress.com/very/long/path" type="text" value={input} onChange={handleChange}></input>
-          <button type="submit" onClick={handlesubmit}>submit</button>
+          <button className="submit-field__button" type="submit" onClick={handlesubmit}>submit</button>
         </div>
       </div>
     )
@@ -110,25 +110,58 @@ function UrlBlocks() {
       setInput(e.target.value);
     };
     return (
-      <div>
-        <button onClick={() => DeleteBlock(shortUrl)}>Delete</button> <br></br>
+      <div className='update-field__div'>
         <input type="text" value={input} onChange={handleChange}></input>
-        <button onClick={() => handleUpdate(shortUrl, { input }.input)}> Update Url</button>
+        <button className='update-field__button' onClick={() => handleUpdate(shortUrl, { input }.input)}>Update</button>
       </div>
     )
   }
 
+  function GetDeleteButton({ shortUrl }: UrlProps) {
+    return (
+      <button onClick={() => DeleteBlock(shortUrl)}>🗑</button>
+    )
+  }
+
+  function GetEditButton({ shortUrl }: UrlProps) {
+    const [isVisible, setIsVisible] = useState(false);
+    const toggleVisibility = () => {
+      setIsVisible(!isVisible);
+    };
+    return (
+      <button className="edit-button" onClick={toggleVisibility}>🖉</button>
+
+    )
+  }
+
+  function handleCopy(textToCopy:string) {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        console.log('Text copied to clipboard!');
+      })
+      .catch((err) => {
+        console.error('Failed to copy text: ', err);
+      });
+  };
+
   function GetBlock(props: UrlProps) {
+    const propLink = 'http://localhost:5277/api/Url/' + props.shortUrl;
+    const shortUrl = "http://localhost:5173/" + props.shortUrl;
+    const divContainerId = "id__" + shortUrl
+
     return (
       <tr key={props.shortUrl}>
-        <td>{props.shortUrl}</td>
-        <td className='th-max-width'>{props.longUrl}</td>
-        <td>{props.timesUsed}</td>
-        <td>
-          <details>
-            <summary>Edit</summary>
-            <GetUpdatesBlock {...props} />
-          </details>
+        <td className='td__main td__shortUrl' onClick={()=> handleCopy(shortUrl)}>  {shortUrl} 📋</td>
+        <td className='td__main'  >{props.shortUrl}</td>
+        <td className='th-max-width td__main td__longUrl'><a href={propLink} className='td__longUrl-link'> {props.longUrl}</a>
+          <div className={"update-field__container "+ divContainerId} ><GetUpdatesBlock {...props} /> </div>
+        </td>
+        <td className='td__main'>{props.timesUsed}</td>
+        {/* <td className='td__edit'>
+          <GetEditButton {...props} />
+        </td> */}
+        <td className='td__edit'>
+          <GetDeleteButton {...props} />
         </td>
       </tr>
     )
@@ -137,14 +170,15 @@ function UrlBlocks() {
     <>
       <PostField />
       <div className="overflow-x-auto table__set-center">
-        <table className="table">
+        <table className="table table-zebra">
           <thead>
             <tr>
-              <th>Shortened Url</th>
-              <th>Long Url</th>
+              <th>Short url</th>
+              <th>Id</th>
+              <th>Long url</th>
               <th>Times Used</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th></th>
+              
             </tr>
           </thead>
           <tbody>
@@ -165,7 +199,10 @@ function App() {
   return (
     <>
       <h1 className="h1__heading"> My little url shortener </h1>
+      <p>The website is used to store long urls and make them more easily accessible through a short url. Just paste the id after this website's domain and share it to anyone who can use it to be redirected to the stored url. </p>
+      <br></br>
       <UrlBlocks />
+
     </>
   )
 }

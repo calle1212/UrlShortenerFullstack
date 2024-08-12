@@ -30,7 +30,8 @@ public class UrlController(IUrlRepository repo) : Controller
         if (foundUrl != null)
         {
             foundUrl.timesUsed += 1;
-            return foundUrl; // redirect here
+            return Redirect(foundUrl.LongUrl); // redirect here
+            //return(foundUrl);
         }
         return NotFound("Url was not found");
     }
@@ -53,9 +54,9 @@ public class UrlController(IUrlRepository repo) : Controller
     }
 
     [HttpPatch]
-    public ActionResult<Url> Update([FromBody] string shortUrl,[FromBody] string longUrl)
+    public ActionResult<Url> Update([FromBody] UrlUpdateRequest urlUpdate)
     {
-        return _repo.UpdateUrl(shortUrl, longUrl) is Url url
+        return _repo.UpdateUrl(urlUpdate.shortUrl, urlUpdate.longUrl) is Url url
         ? url
         : NotFound("The url id was not found");
     }
