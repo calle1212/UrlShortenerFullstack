@@ -39,7 +39,6 @@ public class UrlController(IUrlRepository repo) : Controller
     [HttpPost]
     public ActionResult<Url> Create([FromBody] string longUrl)
     {
-
         Url newUrl = _repo.CreateUrl(longUrl);
         return CreatedAtAction(nameof(GetUrl), new { shortUrl = newUrl!.ShortUrl }, newUrl);
     }

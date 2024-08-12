@@ -8,6 +8,8 @@ interface UrlProps {
 }
 
 
+
+
 function ShortenString(longUrl: string): string {
   const maxLength: number = 80;
   if (longUrl.length > maxLength) {
@@ -123,22 +125,7 @@ function UrlBlocks() {
     )
   }
 
-  function GetEditButton({ shortUrl }: UrlProps) {
-    const [isVisible, setIsVisible] = useState(false);
-    const toggleVisibility = () => {
-      setIsVisible(!isVisible);
-    };
-    return (
-      <div>
-      <button className="edit-button" onClick={toggleVisibility}>🖉</button>
-      {isVisible && (
-        <div className="mt-4 p-4 bg-blue-200">
-          This is a toggled div!
-        </div>
-      )}
-      </div>
-    )
-  }
+
 
   function GetShortUrl({ shortUrl }: UrlProps) {
     const textToCopy = "http://localhost:5173/" + shortUrl;
@@ -173,27 +160,54 @@ function UrlBlocks() {
     );
   }
 
+  function GetEditButton({indexor , setIsVisible }: sendtoEditButton) {
+    console.log(indexor);
+    const index = indexor+1;
+    const toggleVisibility = () => {
+      const newVisibilityStates = [...isVisible];
+      newVisibilityStates[index] = !newVisibilityStates[index];
+      setIsVisible(newVisibilityStates);
+    };
+    return (
+      <div>
+        <button className="edit-button" onClick={toggleVisibility}>🖉</button>
+      </div>
+    )
+  }
+  let index = 0;
+  const [isVisible, setIsVisible] = useState<boolean[]>(Array(UrlPropsArray.length).fill(false));
+  interface sendtoEditButton {
+    setIsVisible: React.Dispatch<React.SetStateAction<boolean[]>>
+    indexor:number
+  }
+
   function GetBlock(props: UrlProps) {
     const propLink = 'http://localhost:5277/api/Url/' + props.shortUrl;
+    const indexor = index;
+    const sendToButton:sendtoEditButton = {setIsVisible, indexor};
     
+    index +=1;
     return (
       <tr key={props.shortUrl}>
         <td className='td__main td__shortUrl' >  <GetShortUrl {...props} /></td>
         <td className='th-max-width td__main td__longUrl'><a href={propLink} className='td__longUrl-link'> {props.longUrl}</a>
-         <GetUpdatesBlock {...props} />
+         {isVisible[index]&& <GetUpdatesBlock {...props} /> }
         </td>
         <td className='td__main'>{props.timesUsed}</td>
- 
+
         <td className='td__main'  >{props.shortUrl}</td>
-        {/* <td className='td__edit'>
-          <GetEditButton {...props} />
-        </td> */}
+        <td className='td__edit'>
+          <GetEditButton {...sendToButton} />
+        </td>
         <td className='td__edit'>
           <GetDeleteButton {...props} />
         </td>
       </tr>
     )
   }
+
+
+
   return (
     <>
       <PostField />
@@ -205,7 +219,7 @@ function UrlBlocks() {
               <th>Long url</th>
               <th>Times Used</th>
               <th>Id</th>
-              {/* <th></th> */}
+              <th></th>
               <th></th>
 
             </tr>
@@ -227,7 +241,7 @@ function App() {
   }
   return (
     <>
-      <h1 className="h1__heading"> My little url shortener </h1>
+      <h1 className="h1__heading" > My little url shortener </h1>
       <p>The website is used to store long urls and make them more easily accessible through a short url. Just paste the id after this website's domain and share it to anyone who can use it to be redirected to the stored url. </p>
       <br></br>
       <UrlBlocks />
