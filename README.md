@@ -1,4 +1,4 @@
-# UrlShortenerFullstack
+# URL Shortener - a fullstack application
 A URL shortener that can be used for sending shortened links to friends and associates.
 
 The URL shortener works by redirecting anyone who clicks on the shortened link to the original link that was stored in the backend. 
