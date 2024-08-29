@@ -10,6 +10,7 @@ The URL shortener also keeps some statistics on how many people have used a spec
 3. In your terminal, run the command "dotnet run"
 4. cd into ../Frontend
 5. In your terminal, run the command "npm run dev"
+6. In your browser, open http://localhost:5174/ to see the application!
 
 ### Future improvements 
 - Persistent database
