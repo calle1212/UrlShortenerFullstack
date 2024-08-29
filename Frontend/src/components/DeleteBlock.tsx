@@ -1,19 +1,40 @@
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { UrlProps } from "../types";
 
- function handleDelete(shortUrl: string) {
-    fetch("http://localhost:5277/api/Url", ({
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
+export default function GetDeleteButton({ shortUrl }: UrlProps) {
+  const queryClient = useQueryClient();
+
+
+    const postUrlMutation = useMutation({
+      mutationFn: async () => {
+          const response = await fetch("http://localhost:5277/api/Url", ({
+              method: "DELETE",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify(shortUrl)
+          }))
+          return await response.json()
       },
-      body: JSON.stringify(shortUrl)
-    })).catch((res) => (console.error(res)))
+      onMutate: () => { },
+      onSettled: () => queryClient.invalidateQueries({ queryKey: ["repoData"] })
+  })
+  
+  return (
+    <button onClick={() => postUrlMutation.mutate()}>🗑</button>
+  )
+}
 
-    setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
-  }
+//  function handleDelete(shortUrl: string) {
 
-  export default function GetDeleteButton({ shortUrl }: UrlProps) {
-    return (
-      <button onClick={() => handleDelete(shortUrl)}>🗑</button>
-    )
-  }
+//     fetch("http://localhost:5277/api/Url", ({
+//       method: "DELETE",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(shortUrl)
+//     })).catch((res) => (console.error(res)))
+
+//     setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
+//   }
+

@@ -1,24 +1,31 @@
 import { useState } from "react";
-import { UrlProps } from "../types";
-import { shortenString } from "../utilFunctions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function PostField() {
     const [input, setInput] = useState("");
+    const queryClient = useQueryClient();
+
+
+    const postUrlMutation = useMutation({
+      mutationFn: async () => {
+          const response = await fetch("http://localhost:5277/api/Url", ({
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ input }.input)
+          }))
+          return await response.json()
+      },
+      onMutate: () => { },
+      onSettled: () => queryClient.invalidateQueries({ queryKey: ["repoData"] })
+  })
 
     async function handlesubmit() {
-      const response = await fetch("http://localhost:5277/api/Url", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ input }.input)
-      });
-      const responseData: UrlProps = await response.json();
-      responseData.longUrl = shortenString(responseData.longUrl);
-      setUrlPropsArray([...UrlPropsArray, responseData]);
+      postUrlMutation.mutate();
     }
-    const handleChange = (e) => {
-      setInput(e.target.value);
+    const handleChange = (e:React.FormEvent<HTMLInputElement>) => {
+      setInput(e.currentTarget.value);
     };
     return (
       <div>

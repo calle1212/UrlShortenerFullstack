@@ -8,7 +8,7 @@ export default function GetUpdatesBlock({ isVisible, props }: sendToUpdateBlock)
     const queryClient = useQueryClient();
     const [input, setInput] = useState("");
 
-    const addUrlMutation = useMutation({
+    const updateUrlMutation = useMutation({
         mutationFn: async () => {
             const req = { shortUrl: props.shortUrl, longUrl: input }
             const response = await fetch("http://localhost:5277/api/Url", ({
@@ -33,7 +33,7 @@ export default function GetUpdatesBlock({ isVisible, props }: sendToUpdateBlock)
             {isVisible &&
             <>
             <input type="text" value={input} onChange={handleChange}></input>
-            <button className='update-field__button' onClick={() => addUrlMutation.mutate()}>Update</button>
+            <button className='update-field__button' onClick={() => updateUrlMutation.mutate()}>Update</button>
             </>
             }
         </div>
