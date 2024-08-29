@@ -22,7 +22,6 @@ function ShortenString(longUrl: string): string {
 
 
 function UrlBlocks() {
-  //const UrlPropsArray: UrlProps[] = [];
   const [UrlPropsArray, setUrlPropsArray] = useState<UrlProps[]>([]);
 
   useEffect(() => {
@@ -31,7 +30,6 @@ function UrlBlocks() {
         return res.json()
       })
       .then((data) => {
-        //console.log(data);
         data.forEach(element => {
           element.longUrl = ShortenString(element.longUrl);
         });
@@ -51,7 +49,6 @@ function UrlBlocks() {
         body: JSON.stringify({ input }.input)
       });
       const responseData: UrlProps = await response.json();
-      //console.log(responseData);
       responseData.longUrl = ShortenString(responseData.longUrl);
       setUrlPropsArray([...UrlPropsArray, responseData]);
     }
