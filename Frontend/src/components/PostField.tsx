@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UrlProps } from "../types";
-import { shortenString } from "../App";
+import { shortenString } from "../utilFunctions";
 
 export default function PostField() {
     const [input, setInput] = useState("");

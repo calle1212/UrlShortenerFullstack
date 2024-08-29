@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { UrlProps } from "../types";
+
 export default function GetShortUrl({ shortUrl }: UrlProps) {
     const textToCopy = "http://localhost:5173/" + shortUrl;
 

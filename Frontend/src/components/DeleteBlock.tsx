@@ -1,3 +1,5 @@
+import { UrlProps } from "../types";
+
  function handleDelete(shortUrl: string) {
     fetch("http://localhost:5277/api/Url", ({
       method: "DELETE",
@@ -10,7 +12,7 @@
     setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
   }
 
-  export default function DeleteButton({ shortUrl }: UrlProps) {
+  export default function GetDeleteButton({ shortUrl }: UrlProps) {
     return (
       <button onClick={() => handleDelete(shortUrl)}>🗑</button>
     )

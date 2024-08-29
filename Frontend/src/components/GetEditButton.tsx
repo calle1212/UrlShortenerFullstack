@@ -1,13 +1,12 @@
-export default function GetEditButton({ indexor, setIsVisible }: sendtoEditButton) {
-    const index = indexor + 1;
-    const toggleVisibility = () => {
-      const newVisibilityStates = [...isVisible];
-      newVisibilityStates[index] = !newVisibilityStates[index];
-      setIsVisible(newVisibilityStates);
-    };
+// import { sendtoEditButton } from "../types";
+
+import { sendToEditButton } from "../types";
+
+export default function GetEditButton({isVisible, setIsVisible} : sendToEditButton) {
+    
     return (
       <div>
-        <button className="edit-button" onClick={toggleVisibility}>🖉</button>
+        <button className="edit-button"  onClick={() => setIsVisible(!isVisible)}>🖉</button>
       </div>
     )
   }
