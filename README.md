@@ -1,7 +1,10 @@
 # UrlShortenerFullstack
-My Url shortener application
+A URL shortener that can be used for sending shortened links to friends and associates.
 
-### Future improvements: 
+The URL shortener works by redirecting anyone who clicks on the shortened link to the original link that was stored in the backend. 
+The URL shortener also keeps some statistics on how many people have used a specific shortened URL.
+
+### Future improvements 
 - Persistent database
 - Pagination
 - Automatically format links
