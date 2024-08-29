@@ -71,7 +71,6 @@ function UrlBlocks() {
   }
 
   function DeleteBlock(shortUrl: string) {
-    //console.log(shortUrl);
     fetch("http://localhost:5277/api/Url", ({
       method: "DELETE",
       headers: {
@@ -93,19 +92,16 @@ function UrlBlocks() {
       body: JSON.stringify(req)
 
     })).catch((res) => (console.error(res)))
-    //setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
     const arrElements = [...UrlPropsArray];
     const foundUrl = arrElements.find(a => a.shortUrl == shortUrlInput)
     if (foundUrl != undefined) {
       longUrlInput = ShortenString(longUrlInput);
       foundUrl.longUrl = longUrlInput;
-      //console.log(arrElements);
       setUrlPropsArray(arrElements);
     }
   }
 
   function GetUpdatesBlock({ shortUrl }: UrlProps) {
-    //console.log(typeof propsInput.shortUrl); // Should output 'string'
 
     const [input, setInput] = useState("");
     const handleChange = (e) => {
@@ -134,7 +130,7 @@ function UrlBlocks() {
       navigator.clipboard.writeText(textToCopy)
         .then(() => {
           setShowMessage(true);
-          setTimeout(() => setShowMessage(false), 1500); // Hide the message after 1.5 seconds
+          setTimeout(() => setShowMessage(false), 1500); 
         })
         .catch((err) => {
           console.error('Failed to copy text: ', err);
