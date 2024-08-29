@@ -30,8 +30,7 @@ public class UrlController(IUrlRepository repo) : Controller
         if (foundUrl != null)
         {
             foundUrl.timesUsed += 1;
-            return Redirect(foundUrl.LongUrl); // redirect here
-            //return(foundUrl);
+            return Redirect(foundUrl.LongUrl);
         }
         return NotFound("Url was not found");
     }
