@@ -5,13 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function UrlTable() {
 
-
-
     const { isPending, error, data, isFetching } = useQuery({
         queryKey: ['repoData'],
         queryFn: getUrls
     })
-
 
     if(isPending || isFetching){
         return(
@@ -46,7 +43,6 @@ export default function UrlTable() {
                             <th>Id</th>
                             <th></th>
                             <th></th>
-
                         </tr>
                     </thead>
                     <tbody>

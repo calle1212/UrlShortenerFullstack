@@ -24,17 +24,3 @@ export default function GetDeleteButton({ shortUrl }: UrlProps) {
     <button onClick={() => postUrlMutation.mutate()}>🗑</button>
   )
 }
-
-//  function handleDelete(shortUrl: string) {
-
-//     fetch("http://localhost:5277/api/Url", ({
-//       method: "DELETE",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(shortUrl)
-//     })).catch((res) => (console.error(res)))
-
-//     setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
-//   }
-
