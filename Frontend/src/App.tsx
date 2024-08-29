@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
 import "./index.css"
-
-interface UrlProps {
-  longUrl: string;
-  shortUrl: string;
-  timesUsed: number;
-}
+import { UrlProps } from './types';
 
 
 
 
-function ShortenString(longUrl: string): string {
+
+
+
+export function shortenString(longUrl: string): string {
   const maxLength: number = 60;
   if (longUrl.length > maxLength) {
     return longUrl.substring(0, maxLength - 3) + "...";
@@ -30,94 +28,12 @@ function UrlBlocks() {
         return res.json()
       })
       .then((data) => {
-        data.forEach(element => {
-          element.longUrl = ShortenString(element.longUrl);
+        data.forEach((element:UrlProps) => {
+          element.longUrl = shortenString(element.longUrl);
         });
         setUrlPropsArray(data);
       })
   }, [])
-
-  function PostField() {
-    const [input, setInput] = useState("");
-
-    async function handlesubmit() {
-      const response = await fetch("http://localhost:5277/api/Url", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ input }.input)
-      });
-      const responseData: UrlProps = await response.json();
-      responseData.longUrl = ShortenString(responseData.longUrl);
-      setUrlPropsArray([...UrlPropsArray, responseData]);
-    }
-    const handleChange = (e) => {
-      setInput(e.target.value);
-    };
-    return (
-      <div>
-        <p>Please enter your long URL</p>
-
-        <div className="submit-field__div">
-          <input className="submit-field__field" placeholder="https://verylongwebsiteaddress.com/very/long/path" type="text" value={input} onChange={handleChange}></input>
-          <button className="submit-field__button" type="submit" onClick={handlesubmit}>submit</button>
-        </div>
-      </div>
-    )
-  }
-
-  function DeleteBlock(shortUrl: string) {
-    fetch("http://localhost:5277/api/Url", ({
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(shortUrl)
-    })).catch((res) => (console.error(res)))
-
-    setUrlPropsArray(UrlPropsArray.filter(url => url.shortUrl != shortUrl));
-  }
-
-  function handleUpdate(shortUrlInput: string, longUrlInput: string) {
-    const req = { shortUrl: shortUrlInput, longUrl: longUrlInput }
-    fetch("http://localhost:5277/api/Url", ({
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(req)
-
-    })).catch((res) => (console.error(res)))
-    const arrElements = [...UrlPropsArray];
-    const foundUrl = arrElements.find(a => a.shortUrl == shortUrlInput)
-    if (foundUrl != undefined) {
-      longUrlInput = ShortenString(longUrlInput);
-      foundUrl.longUrl = longUrlInput;
-      setUrlPropsArray(arrElements);
-    }
-  }
-
-  function GetUpdatesBlock({ shortUrl }: UrlProps) {
-
-    const [input, setInput] = useState("");
-    const handleChange = (e) => {
-      setInput(e.target.value);
-    };
-    return (
-      <div className='update-field__div'>
-        <input type="text" value={input} onChange={handleChange}></input>
-        <button className='update-field__button' onClick={() => handleUpdate(shortUrl, { input }.input)}>Update</button>
-      </div>
-    )
-  }
-
-  function GetDeleteButton({ shortUrl }: UrlProps) {
-    return (
-      <button onClick={() => DeleteBlock(shortUrl)}>🗑</button>
-    )
-  }
-
 
 
   function GetShortUrl({ shortUrl }: UrlProps) {
