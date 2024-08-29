@@ -3,3 +3,8 @@ export interface UrlProps {
     shortUrl: string;
     timesUsed: number;
   }
+
+  export interface sendtoEditButton {
+    setIsVisible: React.Dispatch<React.SetStateAction<boolean[]>>
+    indexor: number
+  }
