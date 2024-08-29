@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.th-max-width {
+  width: 40em;
+}
+
+.table__set-center {
+  display: flex;
+  justify-content: center;
+}
+
+.td__main {
+  text-align: center;
+  padding: 0.5em;
+  border-bottom: 1px solid #aaaaaa;
+  border-top: 1px solid #aaaaaa;
+}
+
+.td__edit {
+  text-align: left;
+  padding: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-bottom: 1px solid #aaaaaa;
+  border-top: 1px solid #aaaaaa;
+}
+
+.td__longUrl{
+  text-align: center;
+}
+.td__longUrl-link:hover{
+text-decoration: underline;
+}
+
+/* tr{ 
+    background-color: rgb(43, 39, 61);
+  } */
+
+.submit-field__div {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  padding-bottom: 6em;
+}
+
+.submit-field__field {
+  width: 30em;
+}
+
+.h1__heading {
+  font-size: x-large;
+  font-weight: bolder;
+  padding-bottom: 2em;
+}
+
+.submit-field__button {
+  margin-left: 1em;
+  padding: 0.4em;
+  border: 1px #aaaaaa solid;
+}
+.submit-field__button:hover {
+  background-color: black;
+}
+
+.update-field__button {
+  margin-left: 0.4em;
+}
+
+.update-field__button:hover {
+  background-color: black;
+}
+
+.update-field__div {
+  display: flex;
+  justify-content: center;
+}
+
+.update-field__container {
+  visibility:unset;
+}
+
+
+
+.td__shortUrl:hover {
+ cursor: pointer;
+}
+
+.copy-to-clipboard-message{
+  position: absolute;
+  margin-top: 0.5em;
+  border: 1px solid #aaaaaa;
+  background-color: #03203b;
+}
+
+
+
+
+
