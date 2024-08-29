@@ -1,7 +1,7 @@
 # UrlShortenerFullstack
 My Url shortener application
 
-###Future improvements: 
+### Future improvements: 
 - Persistent database
 - Pagination
 - Automatically format links
