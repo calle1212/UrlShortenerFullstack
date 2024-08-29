@@ -11,7 +11,7 @@ interface UrlProps {
 
 
 function ShortenString(longUrl: string): string {
-  const maxLength: number = 80;
+  const maxLength: number = 60;
   if (longUrl.length > maxLength) {
     return longUrl.substring(0, maxLength - 3) + "...";
   }
@@ -51,7 +51,7 @@ function UrlBlocks() {
         body: JSON.stringify({ input }.input)
       });
       const responseData: UrlProps = await response.json();
-      console.log(responseData);
+      //console.log(responseData);
       responseData.longUrl = ShortenString(responseData.longUrl);
       setUrlPropsArray([...UrlPropsArray, responseData]);
     }
@@ -71,7 +71,7 @@ function UrlBlocks() {
   }
 
   function DeleteBlock(shortUrl: string) {
-    console.log(shortUrl);
+    //console.log(shortUrl);
     fetch("http://localhost:5277/api/Url", ({
       method: "DELETE",
       headers: {
@@ -99,7 +99,7 @@ function UrlBlocks() {
     if (foundUrl != undefined) {
       longUrlInput = ShortenString(longUrlInput);
       foundUrl.longUrl = longUrlInput;
-      console.log(arrElements);
+      //console.log(arrElements);
       setUrlPropsArray(arrElements);
     }
   }
@@ -134,7 +134,7 @@ function UrlBlocks() {
       navigator.clipboard.writeText(textToCopy)
         .then(() => {
           setShowMessage(true);
-          setTimeout(() => setShowMessage(false), 1500); // Hide the message after 2 seconds
+          setTimeout(() => setShowMessage(false), 1500); // Hide the message after 1.5 seconds
         })
         .catch((err) => {
           console.error('Failed to copy text: ', err);
@@ -161,7 +161,7 @@ function UrlBlocks() {
   }
 
   function GetEditButton({indexor , setIsVisible }: sendtoEditButton) {
-    console.log(indexor);
+    //console.log(indexor);
     const index = indexor+1;
     const toggleVisibility = () => {
       const newVisibilityStates = [...isVisible];
@@ -241,7 +241,7 @@ function App() {
   }
   return (
     <>
-      <h1 className="h1__heading text-yellow-400" > My little url shortener </h1>
+      <h1 className="h1__heading" > My little url shortener </h1>
       <p>The website is used to store long urls and make them more easily accessible through a short url. Just paste the id after this website's domain and share it to anyone who can use it to be redirected to the stored url. </p>
       <br></br>
       <UrlBlocks />
