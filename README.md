@@ -8,14 +8,15 @@ The URL shortener also keeps some statistics on how many people have used a spec
 1. Download the repository
 2. cd into the Backend.api directory
 3. In your terminal, run the command "dotnet run"
-4.
 ```console
-foo@bar:~$ whoami
-foo
+foo@bar:~$ dotnet run
 ```
-5. cd into ../Frontend
-6. In your terminal, run the command "npm run dev"
-7. In your browser, open http://localhost:5174/ to see the application!
+4. cd into ../Frontend
+5. In your terminal, run the command "npm run dev"
+```console
+foo@bar:~$ npm run dev
+```
+6. In your browser, open http://localhost:5174/ to see the application!
 
 
 
